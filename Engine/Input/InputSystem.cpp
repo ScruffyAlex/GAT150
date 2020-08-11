@@ -45,11 +45,12 @@ nc::InputSystem::eButtonState nc::InputSystem::GetButtonState(int id)
 
 	if (buttonDown)
 	{
-		//current state = 1
+		//current state = 1				true			false
 		state = (prevButtonDown) ? eButtonState::HELD : eButtonState::PRESSED ;
 	}
 	else
 	{
+		//current state = 0			true						false
 		state = (prevButtonDown) ? eButtonState::RELEASED : eButtonState::IDLE ;
 	}
 
