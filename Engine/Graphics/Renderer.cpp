@@ -3,11 +3,6 @@
 
 bool nc::Renderer::Startup()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
-	{
-		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-		return false;
-	}
 	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
 	return true;
