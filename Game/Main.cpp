@@ -7,51 +7,37 @@
 #include "Components/PlayerComponent.h"
 #include "Core/Json.h"
 #include "Core/Factory.h"
+#include "Objects/ObjectFactory.h"
+#include "Objects/Scene.h"
+
 
 //#include <SDL_image.h>
 
 nc::Engine engine;
-nc::Factory<nc::Object, std::string> objectFactory;
-
+nc::Scene scene;
 
 int main(int, char**)
 {
-
 	engine.Startup();
 
-	objectFactory.Register("GameObject", nc::Object::Istantiate<nc::GameObject>);
-	objectFactory.Register("PhysicsComponent", nc::Object::Istantiate<nc::PhysicsComponent>);
-	objectFactory.Register("SpriteComponent", nc::Object::Istantiate<nc::SpriteComponent>);
-	objectFactory.Register("PlayerComponent", nc::Object::Istantiate<nc::PlayerComponent>);
+	nc::ObjectFactory::Instance().Initialize();
+	nc::ObjectFactory::Instance().Register("PlayerComponent", new nc::Creator<nc::PlayerComponent, nc::Object>);
+
 	
-
-	nc::GameObject* player = objectFactory.Create<nc::GameObject>("GameObject");
-
-	player->Create(&engine);
-
 	rapidjson::Document document;
-	nc::json::Load("player.txt", document);
-	player->Read(document);
+	nc::json::Load("scene.txt", document);
 
-	nc::Component* component;
-	component = objectFactory.Create<nc::Component>("PhysicsComponent");
-	player->AddComponent(component);
-	component->Create();
+	scene.Create(&engine);
+	scene.Read(document);
 
-	component = objectFactory.Create<nc::Component>("SpriteComponent");
-	player->AddComponent(component);
-	nc::json::Load("sprite.txt", document);
-	component->Read(document);
-	component->Create();
+	/*for (size_t i = 0; i < 10; i++)
+	{
+		nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("ProtoExplosion");
+		gameObject->m_transform.position = nc::Vector2{nc::random(0,800),nc::random(0,600)};
+		gameObject->m_transform.angle = nc::random(0, 360);
+		scene.AddGameObject(gameObject);
 
-	component = objectFactory.Create<nc::Component>("PlayerComponent");
-	player->AddComponent(component);
-	component->Create();
-
-
-	//texture
-	nc::Texture* background = engine.GetSystem<nc::ResourceManager>()->Get<nc::Texture>("background.png", engine.GetSystem<nc::Renderer>());
-	//texture.Create("sf2.png",renderer);
+	}*/
 
 	SDL_Event event;
 	bool quit = false;
@@ -67,7 +53,7 @@ int main(int, char**)
 
 		//update
 		engine.Update();
-		player->Update();
+		scene.Update();
 
 		if (engine.GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_ESCAPE) == nc::InputSystem::eButtonState::PRESSED)
 		{
@@ -80,14 +66,14 @@ int main(int, char**)
 
 		//draw
 		engine.GetSystem<nc::Renderer>()->BeginFrame();
-		background->Draw({ 0, 0 }, { 1.0f, 1.0f }, 0);
-		player->Draw();
+		scene.Draw();
 		
 		
 		engine.GetSystem<nc::Renderer>()->EndFrame();
 		
 	}
 
+	scene.Destroy();
 	engine.Shutdown();
 	//IMG_Quit();
 

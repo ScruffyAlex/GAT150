@@ -4,6 +4,7 @@
 
 bool nc::PhysicsComponent::Create(void* data)
 {
+	m_owner = static_cast<GameObject*>(data);
 	return true;
 }
 

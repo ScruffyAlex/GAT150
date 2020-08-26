@@ -8,15 +8,16 @@ namespace nc
 	public:
 		virtual bool Create(void* data = nullptr) override;
 		virtual void Destroy() override;
+		virtual Object* Clone() override { return new SpriteComponent{ *this }; }
 
-		void Read(const rapidjson::Value& value);
+		void Read(const rapidjson::Value& value) override;
 
 		virtual void Update() override;
 		virtual void Draw() override;
 
 	protected:
-		class Texture* m_texture;
 		std::string m_textureName;
-		SDL_Rect m_rect;
+		Vector2 m_origin;
+		SDL_Rect m_rect{0,0,0,0};
 	};
 }
