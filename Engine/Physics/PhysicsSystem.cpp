@@ -1,12 +1,17 @@
 #include "pch.h"
 #include "PhysicsSystem.h"
+#include "ContactListener.h"
 
 bool nc::PhysicsSystem::Startup()
 {
 
 	b2Vec2 gravity(0.0f, 150.0f);
 	m_world = new b2World(gravity);
-	return false;
+
+	m_contactListener = new ContactListener;
+	m_world->SetContactListener(m_contactListener);
+
+	return true;
 }
 
 void nc::PhysicsSystem::Shutdown()
@@ -49,11 +54,13 @@ b2Body* nc::PhysicsSystem::CreateBody(const Vector2& position, const RigidBodyDa
 
 	b2PolygonShape shape;
 	shape.SetAsBox(data.size.x, data.size.y);
+	
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
 	fixtureDef.density = data.density;
 	fixtureDef.friction = data.friction;
+	fixtureDef.restitution = data.restitution;
 	fixtureDef.userData = gameObject;
 
 	body->CreateFixture(&fixtureDef);

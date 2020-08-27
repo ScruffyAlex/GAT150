@@ -1,10 +1,14 @@
 #include "pch.h"
 #include "Engine.h"
+#include <time.h>
 
 namespace nc {
 
 	bool Engine::Startup()
 	{
+
+		srand(static_cast<unsigned int>(time(nullptr)));
+
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		{
 			std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
@@ -15,6 +19,7 @@ namespace nc {
 		m_systems.push_back(new InputSystem);
 		m_systems.push_back(new ResourceManager);
 		m_systems.push_back(new PhysicsSystem);
+		m_systems.push_back(new AudioSystem);
 
 		for (auto system : m_systems)
 		{

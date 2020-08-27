@@ -30,14 +30,14 @@ int main(int, char**)
 	scene.Create(&engine);
 	scene.Read(document);
 
-	/*for (size_t i = 0; i < 10; i++)
+	for (size_t i = 0; i < 10; i++)
 	{
-		nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("ProtoExplosion");
-		gameObject->m_transform.position = nc::Vector2{nc::random(0,800),nc::random(0,600)};
+		nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("ProtoBox");
+		gameObject->m_transform.position = nc::Vector2{nc::random(0,800),nc::random(0,200)};
 		gameObject->m_transform.angle = nc::random(0, 360);
 		scene.AddGameObject(gameObject);
 
-	}*/
+	}
 
 	SDL_Event event;
 	bool quit = false;
