@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GameObject.h"
 #include "Components/Component.h"
+#include "Scene.h"
 #include "Components/RenderComponent.h"
 #include "ObjectFactory.h"
 #include "GameObject.h"
@@ -17,6 +18,7 @@ namespace nc
 
 		m_transform = other.m_transform;
 		m_engine = other.m_engine;
+		m_scene = other.m_scene;
 
 
 
@@ -30,7 +32,8 @@ namespace nc
 
 	bool GameObject::Create(void* data)
 	{
-		m_engine = static_cast<Engine*>(data);
+		m_scene = static_cast<Scene*>(data);
+		m_engine = m_scene->m_engine;
 		return true;
 	}
 
@@ -124,12 +127,41 @@ namespace nc
 
 	void GameObject::BeginContact(GameObject* other)
 	{
-		std::cout << "begin: " << other->m_name << std::endl;
+		m_contacts.push_back(other);
+
+		Event event;
+		event.type = "CollisionEnter";
+		event.sender = other;
+		event.reciever = this;
+
+		EventManager::Instance().Notify(event);
 	}
 
 	void GameObject::EndContact(GameObject* other)
 	{
-		std::cout << "end: " << other->m_name << std::endl;
+		m_contacts.remove(other);
+
+		Event event;
+		event.type = "CollisionExit";
+		event.sender = other;
+		event.reciever = this;
+
+		EventManager::Instance().Notify(event);
+	}
+
+	std::vector<GameObject*> GameObject::GetContactswithTag(const std::string& tag)
+	{
+		std::vector<GameObject*> contacts;
+
+		for (auto contact : m_contacts)
+		{	
+			if (contact->m_tag == tag)
+			{
+				contacts.push_back(contact);
+			}
+		}
+
+		return contacts;
 	}
 
 	void GameObject::AddComponent(Component* component)

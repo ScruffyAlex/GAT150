@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "Math/Transform.h"
 #include "Engine.h"
+#include "Scene.h"
 #include <vector>
 #include <bitset>
 
@@ -38,6 +39,7 @@ namespace nc
 
 		void BeginContact(GameObject* other);
 		void EndContact(GameObject* other);
+		std::vector<GameObject*> GetContactswithTag(const std::string& tag);
 
 		template<typename T>
 		T* GetComponent()
@@ -66,8 +68,10 @@ namespace nc
 
 		Transform m_transform;
 		Engine* m_engine {nullptr};
+		class Scene* m_scene{ nullptr };
 
 	protected:
 		std::vector<Component*> m_components;
+		std::list<GameObject*> m_contacts;
 	};
 }

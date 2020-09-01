@@ -153,6 +153,9 @@
     <ClInclude Include="Components\AudioComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Core\EventManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -233,10 +236,8 @@
     <ClCompile Include="Components\AudioComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\Build\scene.txt">
-      <Filter>Source Files</Filter>
-    </Text>
+    <ClCompile Include="Core\EventManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

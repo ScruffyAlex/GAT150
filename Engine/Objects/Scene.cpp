@@ -51,11 +51,9 @@ namespace nc
 				GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>(typeName);
 					if (gameObject)
 					{
-						// call game object create, pass in m_engine
-						gameObject->Create(m_engine);
-						// call game object read
+						
+						gameObject->Create(this);
 						gameObject->Read(objectValue);
-						// add game object to scene
 						AddGameObject(gameObject);
 					}
 			}
@@ -75,7 +73,7 @@ namespace nc
 				GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>(typeName);
 				if (gameObject)
 				{
-					gameObject->Create(m_engine);
+					gameObject->Create(this);
 					gameObject->Read(objectValue);
 
 					ObjectFactory::Instance().Register(gameObject->m_name,new Prototype<Object>(gameObject));
